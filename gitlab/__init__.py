@@ -1934,6 +1934,46 @@ class Gitlab(object):
 
         return request.status_code == 200
 
+
+    def getjiraservice(self, project_id):
+        """Get the data for the jira service """
+
+        request = requests.get("{0}/{1}/services/jira".format(self.projects_url, project_id),
+                               verify=self.verify_ssl, auth=self.auth, headers=self.headers, timeout=self.timeout)
+        return request.json()
+
+    def deletejiraservice(self, project_id):
+        """delete the data for the jira service """
+
+        request = requests.delete("{0}/{1}/services/jira".format(self.projects_url, project_id),
+                               verify=self.verify_ssl, auth=self.auth, headers=self.headers, timeout=self.timeout)
+        return request.status_code == 200
+
+    def editjiraservice(self, project_id,
+            project_url,
+            issues_url,
+            new_issue_url,
+            api_url,
+            username,
+            password,
+            jira_issue_transition_id = 2,
+            description = 'Jira issue tracker',
+            ):
+        """ Edits the configuration for the jira intraction services """
+        data = {
+            'project_url': project_url,
+            'issues_url': issues_url,
+            'new_issue_url': new_issue_url,
+            'api_url': api_url,
+            'username': username,
+            'password': password,
+            'jira_issue_transition_id': jira_issue_transition_id,
+            'description': description,
+        }
+        request = requests.put("{0}/{1}/services/jira".format(self.projects_url, project_id),
+                               verify=self.verify_ssl, auth=self.auth, headers=self.headers, data=data, timeout=self.timeout)
+        return request.status_code == 200
+
     def getlabels(self, project_id):
         """Get all labels for given project.
 
